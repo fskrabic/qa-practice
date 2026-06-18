@@ -1,6 +1,6 @@
-# TaskFlow — QA Practice App
+# TaskFlow
 
-A purpose-built demo application for practicing **Cypress E2E automation testing**. It is a full-stack task manager with real authentication, filtering, sorting, comments, a Kanban board, and an admin panel — all rich ground for meaningful test writing.
+A purpose-built demo application for practicing **Cypress E2E automation testing**. It is a full-stack task manager with real authentication, filtering, sorting, comments, a Kanban board, and an admin panel.
 
 ---
 
@@ -44,44 +44,26 @@ taskflow-qa-practice/
 │   └── app.js               # Frontend JavaScript
 ├── cypress/
 │   ├── e2e/
-│   │   ├── 01-auth.cy.js              # Login, logout, password change, roles
-│   │   ├── 02-tasks.cy.js             # CRUD, form validation, API interception
-│   │   ├── 03-filters-and-sorting.cy.js  # Search, dropdowns, multi-filter, sort
-│   │   ├── 04-task-detail.cy.js       # Detail view, inline status, comments
-│   │   ├── 05-board.cy.js             # Kanban board, drag-and-drop
-│   │   └── 06-dashboard-and-admin.cy.js  # Stats, RBAC, user management
+│   │   ├── auth.cy.ts                 # Login, logout, password change, roles
+│   │   ├── tasks.cy.ts                # CRUD, form validation, API interception
+│   │   ├── filters-sorting.cy.ts      # Search, dropdowns, multi-filter, sort
+│   │   ├── task-detail.cy.ts          # Detail view, inline status, comments
+│   │   ├── board.cy.ts                # Kanban board, drag-and-drop
+│   │   └── dashboard.cy.ts            # Stats
+│       └── admin.cy.ts                # User management
 │   ├── fixtures/
 │   │   └── data.json                  # Reusable test data
 │   └── support/
-│       └── e2e.js                     # Custom commands + global beforeEach reset
+│       └── commands.ts                # Custom commands + global beforeEach reset
 ├── cypress.config.js
 └── package.json
 ```
 
 ---
 
-## App Features (and what you can test)
-
-| Feature | Testing opportunities |
-|---|---|
-| **Login / Logout** | Valid/invalid credentials, error messages, session persistence, Enter key, localStorage |
-| **Role-based UI** | Admin nav visibility, forbidden API calls, badge display |
-| **Task CRUD** | Create/edit/delete via modal, form validation, title length limit |
-| **Filters** | Search (debounced), status/priority/tag dropdowns, combined filters, clear all |
-| **Sorting** | Click-to-sort on columns, ascending/descending toggle |
-| **Task Detail** | Data display, inline status change, edit from detail, delete from detail |
-| **Comments** | Add, delete own, delete as admin, count, empty state |
-| **Kanban Board** | Column counts, card placement, create from board, drag-and-drop |
-| **Dashboard** | Stat card arithmetic, count updates on create/delete, recent task links |
-| **Admin Panel** | User table, create user, duplicate username, new user can log in |
-| **Network** | `cy.intercept()` to stub responses, assert request payloads, test error handling |
-| **Password change** | Mismatch, wrong current password, success toast |
-
----
-
 ## Custom Cypress Commands
 
-Defined in `cypress/support/e2e.js`:
+Defined in `cypress/support/commands.ts`:
 
 | Command | Description |
 |---|---|
@@ -89,9 +71,10 @@ Defined in `cypress/support/e2e.js`:
 | `cy.loginAsAdmin()` | Shorthand for admin login |
 | `cy.loginAsTestUser()` | Shorthand for testuser login |
 | `cy.loginByApi(username, password)` | Logs in via API, sets localStorage — skips UI. Faster for tests not about auth. |
-| `cy.createTask(taskData)` | Creates a task via API directly. Useful for setting up test state. |
 | `cy.navigateTo(view)` | Clicks the nav link for `dashboard`, `tasks`, `board`, or `admin` |
-| `cy.dismissToast()` | Waits for a toast to appear, then waits for it to disappear |
+| `cy.typeInSearchInput(query)`  |  Type into the search input
+| `cy.selectStatusFilter(status)`  | Select status to filter
+| `cy.dragAndDrop(sourceSelector, targetSelector)` | Drag and drop item
 
 ---
 
@@ -153,17 +136,3 @@ Every interactive element has a `data-cy` attribute for clean Cypress selectors.
 `toast`, `confirm-modal`, `confirm-ok`, `confirm-cancel`, `profile-card`, `profile-name`, `profile-username`, `profile-role`
 
 ---
-
-## Ideas for Further Practice
-
-Once you're comfortable with the included tests, try writing your own:
-
-- **Accessibility**: use `cypress-axe` to check for a11y violations on each page
-- **Visual regression**: integrate `cypress-image-diff` or Percy
-- **Viewport testing**: test the layout at mobile width (`cy.viewport(375, 812)`)
-- **Long titles**: test with a title of exactly 100 characters, then 101
-- **Concurrent edits**: open two tasks in sequence and check state consistency
-- **Tag combinations**: create tasks with multiple tags and filter by each
-- **Keyboard navigation**: tab through the login form, submit with Enter
-- **Slow network**: use `cy.intercept` with `delay` to test loading states
-- **Partial stub**: intercept only `DELETE` calls and verify the UI reacts correctly

@@ -1,0 +1,33 @@
+{
+  "validUser": {
+    "username": "testuser",
+    "password": "test1234",
+    "name": "Bob Tester",
+    "role": "user"
+  },
+  "adminUser": {
+    "username": "admin",
+    "password": "admin123",
+    "name": "Alice Admin",
+    "role": "admin"
+  },
+  "viewerUser": {
+    "username": "viewer",
+    "password": "view5678",
+    "name": "Carol Viewer",
+    "role": "viewer"
+  },
+  "newTask": {
+    "title": "Automate regression suite",
+    "description": "Cover all critical user flows with Cypress",
+    "status": "todo",
+    "priority": "high",
+    "dueDate": "2026-07-31"
+  },
+  "newUser": {
+    "name": "Dana Dev",
+    "username": "danadev",
+    "password": "dana1234",
+    "role": "user"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "taskflow-qa-practice",
+  "version": "1.0.0",
+  "description": "A demo Task Manager app for practicing Cypress E2E automation testing.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:spec": "cypress run --spec"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0"
+  }
+}

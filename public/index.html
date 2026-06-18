@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow — QA Practice App</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════ LOGIN PAGE ══ -->
+<div id="login-page" class="page active">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-mark">✓</div>
+      <h1>TaskFlow</h1>
+      <p>QA Practice Application</p>
+    </div>
+
+    <div class="form-group">
+      <label for="login-username">Username</label>
+      <input
+        type="text"
+        id="login-username"
+        data-cy="username-input"
+        placeholder="Enter username"
+        autocomplete="username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="login-password">Password</label>
+      <input
+        type="password"
+        id="login-password"
+        data-cy="password-input"
+        placeholder="Enter password"
+        autocomplete="current-password"
+      />
+    </div>
+
+    <button id="login-btn" class="btn-primary" data-cy="login-button">Sign In</button>
+    <div id="login-error" data-cy="login-error"></div>
+
+    <div class="login-hint">
+      <strong>Test accounts:</strong><br>
+      admin / admin123 &nbsp;·&nbsp; testuser / test1234 &nbsp;·&nbsp; viewer / view5678
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ APP PAGE ══ -->
+<div id="app-page" class="page">
+
+  <!-- Topbar -->
+  <nav class="topbar">
+    <div class="topbar-logo">
+      <div class="dot"></div>
+      TaskFlow
+    </div>
+
+    <div class="nav-links">
+      <div class="nav-link active" data-cy="nav-dashboard" data-view="dashboard">Dashboard</div>
+      <div class="nav-link"        data-cy="nav-tasks"     data-view="tasks">Tasks</div>
+      <div class="nav-link"        data-cy="nav-board"     data-view="board">Board</div>
+      <div class="nav-link admin-only" data-cy="nav-admin" data-view="admin" style="display:none">Admin</div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="user-badge" id="user-badge" data-cy="user-badge">
+        <div class="avatar" id="user-avatar"></div>
+        <span class="user-name" id="user-name"></span>
+        <span class="role-badge" id="user-role-badge"></span>
+      </div>
+      <button class="btn-logout" id="logout-btn" data-cy="logout-button">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="view active" id="view-dashboard">
+      <h2 class="view-title" style="margin-bottom:24px">Dashboard</h2>
+
+      <div class="stats-grid" data-cy="stats-grid">
+        <div class="stat-card stat-total">
+          <div class="stat-label">Total Tasks</div>
+          <div class="stat-num" data-cy="stat-total">–</div>
+        </div>
+        <div class="stat-card stat-todo">
+          <div class="stat-label">To Do</div>
+          <div class="stat-num" data-cy="stat-todo">–</div>
+        </div>
+        <div class="stat-card stat-progress">
+          <div class="stat-label">In Progress</div>
+          <div class="stat-num" data-cy="stat-inprogress">–</div>
+        </div>
+        <div class="stat-card stat-done">
+          <div class="stat-label">Done</div>
+          <div class="stat-num" data-cy="stat-done">–</div>
+        </div>
+        <div class="stat-card stat-high">
+          <div class="stat-label">High Priority Open</div>
+          <div class="stat-num" data-cy="stat-high">–</div>
+        </div>
+      </div>
+
+      <h3 class="section-title">Recent Tasks</h3>
+      <div class="recent-tasks-list" id="recent-tasks" data-cy="recent-tasks"></div>
+    </div>
+
+    <!-- ── TASKS LIST ── -->
+    <div class="view" id="view-tasks">
+      <div class="view-header">
+        <h2 class="view-title">Tasks</h2>
+        <button class="btn-add" id="btn-add-task" data-cy="add-task-button">+ New Task</button>
+      </div>
+
+      <div class="filters">
+        <input
+          class="search-input"
+          type="text"
+          id="search-input"
+          data-cy="search-input"
+          placeholder="Search tasks…"
+        />
+        <select id="filter-status" class="filter-select" data-cy="filter-status">
+          <option value="">All Statuses</option>
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+        <select id="filter-priority" class="filter-select" data-cy="filter-priority">
+          <option value="">All Priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select id="filter-tag" class="filter-select" data-cy="filter-tag">
+          <option value="">All Tags</option>
+          <option value="qa">qa</option>
+          <option value="docs">docs</option>
+          <option value="bug">bug</option>
+          <option value="devops">devops</option>
+          <option value="perf">perf</option>
+          <option value="auth">auth</option>
+        </select>
+        <button id="btn-clear-filters" class="btn-secondary" data-cy="clear-filters">Clear</button>
+      </div>
+
+      <div class="tasks-count" id="tasks-count" data-cy="tasks-count"></div>
+
+      <table class="tasks-table" data-cy="tasks-table">
+        <thead>
+          <tr>
+            <th class="sortable" data-sort="title"    data-cy="sort-title">Title ↕</th>
+            <th class="sortable" data-sort="status"   data-cy="sort-status">Status ↕</th>
+            <th class="sortable" data-sort="priority" data-cy="sort-priority">Priority ↕</th>
+            <th>Tags</th>
+            <th class="sortable" data-sort="dueDate"  data-cy="sort-due">Due Date ↕</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasks-tbody" data-cy="tasks-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- ── TASK DETAIL ── -->
+    <div class="view" id="view-detail">
+      <div class="detail-header">
+        <button class="btn-back" id="btn-back" data-cy="back-button">←</button>
+        <div class="detail-title-area">
+          <h2 id="detail-title" data-cy="detail-title"></h2>
+          <div class="detail-meta" id="detail-meta"></div>
+        </div>
+        <button class="btn-sm"       id="btn-edit-task"   data-cy="edit-task-button">Edit</button>
+        <button class="btn-secondary" id="btn-delete-task" data-cy="delete-task-button"
+                style="padding:6px 14px;color:var(--red);border-color:var(--red)">Delete</button>
+      </div>
+
+      <div class="detail-grid">
+        <!-- Left column -->
+        <div>
+          <div class="detail-card">
+            <h3>Description</h3>
+            <p class="detail-description" id="detail-description" data-cy="detail-description"></p>
+          </div>
+
+          <div class="detail-card">
+            <h3>Comments (<span id="comment-count" data-cy="comment-count">0</span>)</h3>
+            <div id="comments-list" data-cy="comments-list"></div>
+
+            <div class="comment-form">
+              <div class="comment-textarea">
+                <textarea
+                  id="comment-input"
+                  data-cy="comment-input"
+                  placeholder="Add a comment… (Ctrl+Enter to submit)"
+                ></textarea>
+              </div>
+              <button class="btn-sm" id="btn-add-comment" data-cy="add-comment-button">Post</button>
+            </div>
+            <div id="comment-error" class="form-error" data-cy="comment-error"></div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div>
+          <div class="detail-card">
+            <h3>Details</h3>
+            <div class="meta-item">
+              <span class="meta-label">Status</span>
+              <select class="status-select-inline" id="detail-status-select" data-cy="status-select">
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+              </select>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Priority</span>
+              <span class="meta-value" id="detail-priority" data-cy="detail-priority"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Due Date</span>
+              <span class="meta-value" id="detail-due" data-cy="detail-due"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Assignee</span>
+              <span class="meta-value" id="detail-assignee" data-cy="detail-assignee"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Created</span>
+              <span class="meta-value" id="detail-created"></span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Tags</span>
+              <span id="detail-tags" data-cy="detail-tags"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BOARD ── -->
+    <div class="view" id="view-board">
+      <div class="view-header">
+        <h2 class="view-title">Board</h2>
+        <button class="btn-add" id="btn-add-task-board" data-cy="add-task-board-button">+ New Task</button>
+      </div>
+
+      <div class="board" id="board" data-cy="board">
+        <div class="board-col" id="col-todo" data-status="todo" data-cy="col-todo">
+          <div class="board-col-header">
+            <span class="board-col-title">To Do</span>
+            <span class="board-count" id="count-todo" data-cy="count-todo">0</span>
+          </div>
+          <div id="cards-todo" data-cy="cards-todo"></div>
+        </div>
+
+        <div class="board-col" id="col-in-progress" data-status="in-progress" data-cy="col-in-progress">
+          <div class="board-col-header">
+            <span class="board-col-title">In Progress</span>
+            <span class="board-count" id="count-in-progress" data-cy="count-in-progress">0</span>
+          </div>
+          <div id="cards-in-progress" data-cy="cards-in-progress"></div>
+        </div>
+
+        <div class="board-col" id="col-done" data-status="done" data-cy="col-done">
+          <div class="board-col-header">
+            <span class="board-col-title">Done</span>
+            <span class="board-count" id="count-done" data-cy="count-done">0</span>
+          </div>
+          <div id="cards-done" data-cy="cards-done"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROFILE ── -->
+    <div class="view" id="view-profile">
+      <h2 class="view-title" style="margin-bottom:24px">My Profile</h2>
+      <div class="profile-section">
+
+        <div class="detail-card" data-cy="profile-card">
+          <h3>Account Info</h3>
+          <div class="meta-item">
+            <span class="meta-label">Name</span>
+            <span class="meta-value" id="profile-name" data-cy="profile-name"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Username</span>
+            <span class="meta-value" id="profile-username" data-cy="profile-username"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Role</span>
+            <span class="meta-value" id="profile-role" data-cy="profile-role"></span>
+          </div>
+        </div>
+
+        <div class="detail-card" data-cy="change-password-card">
+          <h3>Change Password</h3>
+          <div class="form-group">
+            <label for="pw-current">Current Password</label>
+            <input type="password" id="pw-current" data-cy="pw-current" />
+          </div>
+          <div class="form-group">
+            <label for="pw-new">New Password</label>
+            <input type="password" id="pw-new" data-cy="pw-new" />
+          </div>
+          <div class="form-group">
+            <label for="pw-confirm">Confirm New Password</label>
+            <input type="password" id="pw-confirm" data-cy="pw-confirm" />
+          </div>
+          <div id="pw-error" class="form-error" data-cy="pw-error"></div>
+          <button
+            class="btn-primary"
+            id="btn-change-pw"
+            data-cy="change-password-button"
+            style="width:auto;padding:8px 20px;margin-top:4px"
+          >Update Password</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── ADMIN ── -->
+    <div class="view" id="view-admin">
+      <div class="view-header">
+        <h2 class="view-title">User Management</h2>
+        <button class="btn-add" id="btn-add-user" data-cy="add-user-button">+ New User</button>
+      </div>
+
+      <table class="users-table" data-cy="users-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody" data-cy="users-tbody"></tbody>
+      </table>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app-page -->
+
+
+<!-- ══════════════════════════════════════════════════════ MODALS ══ -->
+
+<!-- Task Form Modal -->
+<div class="modal-overlay" id="task-modal" data-cy="task-modal">
+  <div class="modal">
+    <button class="modal-close" id="task-modal-close" aria-label="Close">✕</button>
+    <h2 class="modal-title" id="task-modal-title">New Task</h2>
+
+    <div class="form-group">
+      <label for="task-title-input">Title <span style="color:var(--red)">*</span></label>
+      <input
+        type="text"
+        id="task-title-input"
+        data-cy="task-title-input"
+        maxlength="100"
+        placeholder="Task title"
+      />
+      <div class="form-error" id="title-error" data-cy="title-error"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="task-desc-input">Description</label>
+      <textarea
+        id="task-desc-input"
+        data-cy="task-desc-input"
+        rows="3"
+        placeholder="Optional description"
+      ></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="task-status-input">Status</label>
+        <select id="task-status-input" data-cy="task-status-input">
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="task-priority-input">Priority</label>
+        <select id="task-priority-input" data-cy="task-priority-input">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="task-assignee-input">Assignee</label>
+        <select id="task-assignee-input" data-cy="task-assignee-input">
+          <option value="">Unassigned</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="task-due-input">Due Date</label>
+        <input type="date" id="task-due-input" data-cy="task-due-input" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Tags</label>
+      <div class="tags-list" id="tags-checkboxes" data-cy="tags-checkboxes">
+        <label class="tag-checkbox-label"><input type="checkbox" value="qa">    qa</label>
+        <label class="tag-checkbox-label"><input type="checkbox" value="docs">  docs</label>
+        <label class="tag-checkbox-label"><input type="checkbox" value="bug">   bug</label>
+        <label class="tag-checkbox-label"><input type="checkbox" value="devops">devops</label>
+        <label class="tag-checkbox-label"><input type="checkbox" value="perf">  perf</label>
+        <label class="tag-checkbox-label"><input type="checkbox" value="auth">  auth</label>
+      </div>
+    </div>
+
+    <div class="form-error" id="task-form-error" data-cy="task-form-error"></div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" data-cy="task-modal-cancel" id="task-modal-cancel">Cancel</button>
+      <button
+        class="btn-primary"
+        id="task-modal-submit"
+        data-cy="task-modal-submit"
+        style="width:auto;padding:8px 20px"
+      >Save Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal-overlay" id="user-modal" data-cy="user-modal">
+  <div class="modal">
+    <button class="modal-close" id="user-modal-close" aria-label="Close">✕</button>
+    <h2 class="modal-title">New User</h2>
+
+    <div class="form-group">
+      <label for="user-name-input">Full Name</label>
+      <input type="text" id="user-name-input" data-cy="user-name-input" />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="user-username-input">Username</label>
+        <input type="text" id="user-username-input" data-cy="user-username-input" />
+      </div>
+      <div class="form-group">
+        <label for="user-password-input">Password</label>
+        <input type="password" id="user-password-input" data-cy="user-password-input" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="user-role-input">Role</label>
+      <select id="user-role-input" data-cy="user-role-input">
+        <option value="user">User</option>
+        <option value="viewer">Viewer</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <div class="form-error" id="user-form-error" data-cy="user-form-error"></div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" id="user-modal-cancel">Cancel</button>
+      <button
+        class="btn-primary"
+        id="user-modal-submit"
+        data-cy="user-modal-submit"
+        style="width:auto;padding:8px 20px"
+      >Create User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="modal-overlay" id="confirm-modal" data-cy="confirm-modal">
+  <div class="modal" style="width:360px">
+    <h2 class="modal-title" id="confirm-title">Confirm</h2>
+    <p id="confirm-msg" style="color:var(--text-dim);margin-bottom:4px"></p>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="confirm-cancel" data-cy="confirm-cancel">Cancel</button>
+      <button class="btn-danger"    id="confirm-ok"     data-cy="confirm-ok">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>
