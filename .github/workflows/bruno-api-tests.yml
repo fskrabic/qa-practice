@@ -33,7 +33,9 @@ jobs:
 
       - name: Run Bruno collection
         working-directory: bruno
-        run : bru run collections/** --env-var baseUrl=https://qa-practice-vrc.vercel.app
+        run : |
+            bru run collections/** --env-var baseUrl=https://qa-practice-vrc.vercel.app
+            --reporter-html ../../reports/github-actions-report.html
 
       - name: Upload Bruno report
         if: ${{ !cancelled() }}
