@@ -1,0 +1,27 @@
+meta {
+  name: Add comment
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/tasks/1/comments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "text": "This is a comment added via Bruno."
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("commentId", res.body.id);
+  }
+}

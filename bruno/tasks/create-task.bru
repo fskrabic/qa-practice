@@ -1,0 +1,33 @@
+meta {
+  name: Create task
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/tasks
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "New task from Bruno",
+    "description": "Created via the Bruno collection",
+    "status": "todo",
+    "priority": "medium",
+    "assigneeId": 1,
+    "tags": ["qa", "docs"],
+    "dueDate": "2026-07-31"
+  }
+}
+
+script:post-response {
+  if (res.status === 201) {
+    bru.setEnvVar("taskId", res.body.id);
+  }
+}

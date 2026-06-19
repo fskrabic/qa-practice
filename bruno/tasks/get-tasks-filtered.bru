@@ -1,0 +1,22 @@
+meta {
+  name: Get tasks with filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/tasks?status=todo&priority=high&sortBy=dueDate&order=asc
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  status: todo
+  priority: high
+  sortBy: dueDate
+  order: asc
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Create task with validation errors
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/tasks
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "",
+    "status": "",
+    "priority": ""
+  }
+}

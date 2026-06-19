@@ -1,0 +1,27 @@
+meta {
+  name: Update task
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/api/tasks/{{taskId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "title": "Updated task title",
+    "description": "Updated via Bruno",
+    "status": "in-progress",
+    "priority": "high",
+    "assigneeId": 2,
+    "tags": ["qa"],
+    "dueDate": "2026-08-15"
+  }
+}

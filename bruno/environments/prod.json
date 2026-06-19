@@ -1,0 +1,16 @@
+{
+  "name": "Prod",
+  "variables": [
+    {
+      "name": "baseUrl",
+      "value": "https://qa-practice-vrc.vercel.app",
+      "enabled": true
+    },
+    {
+      "name": "token",
+      "value": "",
+      "enabled": true,
+      "secret": true
+    }
+  ]
+}

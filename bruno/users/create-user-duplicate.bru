@@ -1,0 +1,24 @@
+meta {
+  name: Create user with duplicate username
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "Duplicate Admin",
+    "username": "admin",
+    "password": "somepassword",
+    "role": "user"
+  }
+}
