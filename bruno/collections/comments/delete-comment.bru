@@ -13,3 +13,10 @@ delete {
 auth:bearer {
   token: {{token}}
 }
+
+script:pre-request {
+  if (!bru.getEnvVar("token")) {
+    const res = await bru.runRequest("collections/auth/login");
+    bru.setEnvVar("token", res.data.token);
+  }
+}

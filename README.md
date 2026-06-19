@@ -1,6 +1,6 @@
 # TaskFlow
 
-A purpose-built demo application for practicing **Cypress E2E automation testing**. It is a full-stack task manager with real authentication, filtering, sorting, comments, a Kanban board, and an admin panel.
+A purpose-built demo application for practicing **Cypress E2E automation testing** and **Bruno API testing**. It is a full-stack task manager with real authentication, filtering, sorting, comments, a Kanban board, and an admin panel.
 
 ---
 
@@ -37,11 +37,25 @@ npm run cy:run
 
 ```
 taskflow-qa-practice/
+├── .github/workflows/
+│   └── cypress.yml          # YML file for integrating Cypress with GitHub Actions
+│   └── bruno-api-tests.yml  # YML file for integrating Bruno tests with GitHub Actions
 ├── src/
 │   └── server.js            # Express backend (REST API + in-memory store)
 ├── public/
 │   ├── index.html           # Single-page app (HTML + CSS)
 │   └── app.js               # Frontend JavaScript
+├── bruno/
+│   ├── collections/
+│   │   ├── auth                 
+│   │   ├── comments
+│   │   ├── stats
+│   │   ├── tasks
+│   │   ├── test
+│   │   └── user
+│   ├── environments/
+│   │   └── prod.json
+│   └── bruno.json
 ├── cypress/
 │   ├── e2e/
 │   │   ├── auth.cy.ts                 # Login, logout, password change, roles

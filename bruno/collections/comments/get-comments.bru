@@ -1,0 +1,23 @@
+meta {
+  name: Get comments
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/tasks/1/comments
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: fa3kloqin0fmqkpwcph
+}
+
+script:pre-request {
+  
+  if (!bru.getEnvVar("token")) {
+    const res = await bru.runRequest("collections/auth/login");  
+    bru.setEnvVar("token", res.data.token);
+  }
+}

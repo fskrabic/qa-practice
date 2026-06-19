@@ -17,3 +17,10 @@ auth:bearer {
 vars:pre-request {
   taskId: 1
 }
+
+script:pre-request {
+  if (!bru.getEnvVar("token")) {
+    const res = await bru.runRequest("collections/auth/login");  
+    bru.setEnvVar("token", res.data.token);
+  }
+}

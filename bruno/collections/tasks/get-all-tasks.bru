@@ -1,0 +1,22 @@
+meta {
+  name: Get all tasks
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/tasks
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:pre-request {
+  if (!bru.getEnvVar("token")) {
+    const res = await bru.runRequest("collections/auth/login");  
+    bru.setEnvVar("token", res.data.token);
+  }
+}

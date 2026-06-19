@@ -20,6 +20,13 @@ body:json {
   }
 }
 
+script:pre-request {
+  if (!bru.getEnvVar("token")) {
+    const res = await bru.runRequest("collections/auth/login");
+    bru.setEnvVar("token", res.data.token);
+  }
+}
+
 script:post-response {
   if (res.status === 201) {
     bru.setEnvVar("commentId", res.body.id);
