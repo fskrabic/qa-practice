@@ -40,5 +40,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bruno-report
-          path: reports
+          path: reports/results.html
           if-no-files-found: warn
