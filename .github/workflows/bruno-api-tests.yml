@@ -15,12 +15,12 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "20"
 
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
@@ -29,8 +29,17 @@ jobs:
         run: bru --version
 
       - name: Prepare report directory
+        working-directory: bruno
         run: mkdir -p reports
 
       - name: Run Bruno collection
         working-directory: bruno
-        run : bru run collections/** --env-var baseUrl=https://qa-practice-vrc.vercel.app
+        run: bru run collections -r --env-file environments/prod.json --reporter-json reports/results.json --reporter-html reports/results.html
+
+      - name: Upload Bruno report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bruno-report
+          path: bruno/reports
+          retention-days: 14
