@@ -7,7 +7,6 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    environment: production
     strategy:
       fail-fast: false
       matrix:
