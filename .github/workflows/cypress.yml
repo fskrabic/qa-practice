@@ -23,6 +23,6 @@ jobs:
           record: true
           parallel: true
         env:
-          PROJECT_ID: ${{ vars.PROJECT_ID }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
