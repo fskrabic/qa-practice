@@ -32,3 +32,7 @@ script:post-response {
     bru.setEnvVar("commentId", res.body.id);
   }
 }
+
+assert {
+  res.status: 201
+}

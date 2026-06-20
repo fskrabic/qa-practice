@@ -11,13 +11,16 @@ get {
 }
 
 auth:bearer {
-  token: fa3kloqin0fmqkpwcph
+  token: {{token}}
 }
 
 script:pre-request {
-  
   if (!bru.getEnvVar("token")) {
     const res = await bru.runRequest("collections/auth/login");  
     bru.setEnvVar("token", res.data.token);
   }
+}
+
+assert {
+  res.status: 200
 }

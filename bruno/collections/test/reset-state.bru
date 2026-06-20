@@ -15,3 +15,7 @@ script:post-response {
     bru.setEnvVar("token", "");
   }
 }
+
+assert {
+  res.status: 200
+}

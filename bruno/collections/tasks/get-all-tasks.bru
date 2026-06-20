@@ -20,3 +20,7 @@ script:pre-request {
     bru.setEnvVar("token", res.data.token);
   }
 }
+
+assert {
+  res.status: 200
+}
