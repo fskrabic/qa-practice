@@ -1,5 +1,5 @@
 {
-  "name": "Prod",
+  "name": "prod",
   "variables": [
     {
       "name": "baseUrl",

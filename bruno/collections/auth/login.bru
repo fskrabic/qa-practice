@@ -22,3 +22,7 @@ script:post-response {
     bru.setEnvVar("token", res.body.token);
   }
 }
+
+assert {
+  res.status: 200
+}
